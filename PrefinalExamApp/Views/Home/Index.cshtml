@@ -1,41 +1,119 @@
 ﻿@model List<PrefinalExamApp.Models.ExamQuestion>
 
 @{
-    ViewData["Title"] = "Prefinal Exam Showcase";
+    ViewData["Title"] = "Prefinal Examination | Reviewer Portal";
 }
 
-<div class="container my-4">
-    <div class="text-center mb-5 p-4 bg-dark text-white rounded-3 shadow">
-        <h1 class="display-5 fw-bold">Prefinal Examination Reviewer</h1>
-        <p class="lead mb-0">IT ELECTIVE 2 – WEB SYSTEMS AND TECHNOLOGIES</p>
+<style>
+    body {
+        background-color: #0d1117;
+        color: #c9d1d9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .glass-card {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .glass-card:hover {
+        border-color: #58a6ff;
+        transform: translateY(-2px);
+    }
+
+    .option-item {
+        background-color: #21262d;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+        border-radius: 8px !important;
+        margin-bottom: 8px;
+        padding: 12px 16px;
+    }
+
+    .option-item.correct-answer {
+        background-color: rgba(46, 160, 67, 0.15) !important;
+        border-color: #2ea043 !important;
+        color: #56d364 !important;
+        font-weight: 600;
+    }
+
+    .badge-status {
+        background-color: rgba(56, 139, 253, 0.15);
+        color: #58a6ff;
+        border: 1px solid rgba(56, 139, 253, 0.4);
+    }
+
+    .explanation-box {
+        background-color: #0d1117;
+        border-left: 3px solid #58a6ff;
+        border-radius: 4px;
+        padding: 10px 14px;
+    }
+</style>
+
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="glass-card p-4 mb-4 text-center">
+        <span class="badge badge-status px-3 py-2 rounded-pill mb-2">Academic Assessment</span>
+        <h1 class="fw-bold text-white mb-1">IT ELECTIVE 2: WEB SYSTEMS & TECHNOLOGIES</h1>
+        <p class="text-secondary mb-0">Prefinal Examination Reviewer & Answers Key</p>
     </div>
 
+    <!-- Quick Stats Bar -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="glass-card p-3 text-center">
+                <small class="text-secondary text-uppercase fw-semibold">Total Questions</small>
+                <h3 class="text-white mb-0 mt-1">@Model.Count</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-3 text-center">
+                <small class="text-secondary text-uppercase fw-semibold">Architecture</small>
+                <h3 class="text-info mb-0 mt-1">ASP.NET Core MVC</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card p-3 text-center">
+                <small class="text-secondary text-uppercase fw-semibold">Data Persistence</small>
+                <h3 class="text-success mb-0 mt-1">In-Memory</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Grid -->
     <div class="row g-4">
         @foreach (var item in Model)
         {
-            <div class="col-md-6">
-                <div class="card h-100 shadow-sm border-0 bg-light">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Question #@item.Number</h5>
-                        <span class="badge bg-warning text-dark">Verified</span>
-                    </div>
-                    <div class="card-body">
-                        <p class="fw-semibold fs-5 text-secondary">@item.QuestionText</p>
-                        <ul class="list-group mb-3">
+            <div class="col-lg-6">
+                <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-primary rounded-pill px-3 py-2">Item #@item.Number</span>
+                            <small class="text-muted">Single Choice</small>
+                        </div>
+                        <h5 class="text-white fw-bold mb-4">@item.QuestionText</h5>
+
+                        <div class="options-container mb-3">
                             @foreach (var opt in item.Options)
                             {
                                 bool isCorrect = opt.StartsWith(item.CorrectAnswer.Substring(0, 1));
-                                <li class="list-group-item @(isCorrect ? "list-group-item-success fw-bold" : "")">
-                                    @opt
-                                    @if(isCorrect) {
-                                        <span class="badge bg-success float-end">Correct</span>
+                                <div class="option-item d-flex justify-content-between align-items-center @(isCorrect ? "correct-answer" : "")">
+                                    <span>@opt</span>
+                                    @if (isCorrect)
+                                    {
+                                        <span class="badge bg-success rounded-pill px-2 py-1 fs-6">✓ Correct</span>
                                     }
-                                </li>
+                                </div>
                             }
-                        </ul>
-                        <div class="alert alert-info mb-0 py-2">
-                            <small><strong>Explanation:</strong> @item.Explanation</small>
                         </div>
+                    </div>
+
+                    <div class="explanation-box mt-3">
+                        <small class="text-secondary d-block fw-semibold mb-1">EXPLANATION</small>
+                        <small class="text-light">@item.Explanation</small>
                     </div>
                 </div>
             </div>
